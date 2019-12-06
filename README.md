@@ -1,7 +1,7 @@
 # What is this?
 ## THIS IS A WIP
 
-This is the terraform code to create the following Looker architecture.
+This is the terraform code to create the following Looker architecture(assuming all the VPC's / Subnets are already in place).
 
 ![AWS](images/looker.jpg)
 
