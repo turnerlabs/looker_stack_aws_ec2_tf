@@ -1,10 +1,10 @@
-# S3 Airflow log Bucket
-resource "aws_s3_bucket" "s3_airflow_log_bucket" {
-  bucket        = "${var.prefix}-${var.s3_airflow_log_bucket_name}"
+# S3 looker log Bucket
+resource "aws_s3_bucket" "s3_looker_log_bucket" {
+  bucket        = "${var.prefix}-${var.s3_looker_log_bucket_name}"
   force_destroy = "true"
 
   lifecycle_rule {
-    id      = "airflow_task_log"
+    id      = "looker_task_log"
     enabled = true
 
     transition {
@@ -31,13 +31,13 @@ resource "aws_s3_bucket" "s3_airflow_log_bucket" {
   }
 }
 
-# S3 Airflow Bucket
-resource "aws_s3_bucket" "s3_airflow_bucket" {
-  bucket        = "${var.prefix}-${var.s3_airflow_bucket_name}"
+# S3 looker Bucket
+resource "aws_s3_bucket" "s3_looker_bucket" {
+  bucket        = "${var.prefix}-${var.s3_looker_bucket_name}"
   force_destroy = "true"
   
   lifecycle_rule {
-    id      = "airflow_server_log"
+    id      = "looker_server_log"
     enabled = true
     prefix  = "logs/"
 
@@ -66,8 +66,8 @@ resource "aws_s3_bucket" "s3_airflow_bucket" {
 }
 
 # S3 ALB access log Bucket
-resource "aws_s3_bucket" "s3_airflow_access_log_bucket" {
-  bucket        = "${var.prefix}-${var.s3_airflow_access_log_bucket_name}"
+resource "aws_s3_bucket" "s3_looker_access_log_bucket" {
+  bucket        = "${var.prefix}-${var.s3_looker_access_log_bucket_name}"
   force_destroy = "true"
   tags = {
     application     = "${var.tag_application}"
@@ -77,7 +77,7 @@ resource "aws_s3_bucket" "s3_airflow_access_log_bucket" {
     environment     = "${var.tag_environment}"
   }
   lifecycle_rule {
-    id      = "airflow_access_logs"
+    id      = "looker_access_logs"
     enabled = true
     
     transition {
@@ -104,7 +104,7 @@ policy = <<EOF
         "s3:PutObject"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.prefix}-${var.s3_airflow_access_log_bucket_name}/*",
+      "Resource": "arn:aws:s3:::${var.prefix}-${var.s3_looker_access_log_bucket_name}/*",
       "Principal": {
         "AWS": [
           "${var.alb_accesslog_account}"

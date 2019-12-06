@@ -16,7 +16,7 @@ variable "tag_team" {}
 variable "tag_environment" {}
 
 variable "vpc_id" {
-  description = "VPC to launch airflow in"
+  description = "VPC to launch looker in"
 }
 
 variable "private_subnet1_id" {
@@ -48,40 +48,36 @@ variable "availability_zone_2" {
   description = "az 2 of 2 azs"
   default     = "us-east-1d"
 }
-variable "airflow_bastion_ami" {
-  description = "Airflow Bastion AMI created by packer"
+variable "looker_bastion_ami" {
+  description = "looker Bastion AMI created by packer"
 }
 
-variable "airflow_websched_ami" {
-  description = "Airflow Webserver / Scheduler AMI created by packer"
+variable "looker_node_ami" {
+  description = "looker Webserver / Scheduler AMI created by packer"
 }
 
-variable "airflow_websched_instance_class" {
-  description = "Airflow websched instance size"
-  default     = "t3.small"
+variable "looker_node_instance_class" {
+  description = "looker instance size"
+  default     = "m4.xlarge"
 }
 
-variable "airflow_worker_ami" {
-  description = "Airflow Worker AMI created by packer"
-}
-
-variable "airflow_worker_instance_class" {
-  description = "Airflow worker instance size"
-  default     = "t3.medium"
-}
-
-variable "airflow_keypair_name" {
-  description = "AWS keypair to use on the airflow ec2 instance"
+variable "looker_keypair_name" {
+  description = "AWS keypair to use on the looker ec2 instance"
 }
 
 variable "db_identifier" {
   description = "Database identifier"
-  default     = "airflow-rds"
+  default     = "looker-rds"
 }
 
 variable "db_port" {
   description = "Database port"
   default     = "3306"
+}
+
+variable "db_use_ssl" {
+  description = "Use SSL for Database connectivity"
+  default     = "true"
 }
 
 variable "db_master_username" {
@@ -91,101 +87,61 @@ variable "db_master_username" {
 
 variable "db_master_password" {}
 
-variable "db_airflow_username" {
-  description = "MySQL Airflow username"
-  default     = "airflow"
+variable "db_looker_username" {
+  description = "MySQL looker username"
+  default     = "looker"
 }
 
-variable "db_airflow_dbname" {
-  description = "MYSQL airflow database name"
-  default     = "airflow"
+variable "db_looker_dbname" {
+  description = "MYSQL looker database name"
+  default     = "looker"
 }
 
 variable "db_engine_version" {
-  description = "MYSQL airflow engine version"
-  default     = "8.0"
+  description = "MYSQL looker engine version"
+  default     = "5.7.16"
 }
 
 variable "db_instance_class" {
-  description = "MYSQL airflow instance class"
-  default     = "db.t2.small"
+  description = "MYSQL looker instance class"
+  default     = "db.m5.2xlarge"
 }
 
-variable "db_parameter_group_name" {
-  description = "MYSQL airflow parameter group"
-  default     = "default.mysql8.0"
+variable "looker_username" {
+  description = "looker username for website access"
+  default     = "looker"
 }
 
-variable "db_charset" {
-  description = "MYSQL airflow database character set"
-  default     = "latin1"
+variable "looker_emailaddress" {
+  description = "looker emailaddress for website access"
 }
 
-variable "db_skip_final_snapshot"{
-  description = "MYSQL airflow database character set"
-  default     = "true"
+variable "looker_password"  {
+  description = "looker password for website access"
 }
 
-variable "ec_node_type" {
-  description = "Node type to use"
-  default = "cache.t2.small"
+variable "looker_first"  {
+  description = "looker users first name for website access"
 }
 
-variable "ec_engine_version" {
-  description = "Redis version to use"
-  default = "4.0.10"
+variable "looker_last"  {
+  description = "looker users last name for website access"
 }
 
-variable "ec_num_cache_nodes" {
-  description = "Number of cache nodes"
-  default = 1
+variable "looker_role"  {
+  description = "looker users role for website access. Roles can be Admin, User, Op, Viewer, and Public"
 }
 
-variable "ec_parameter_group_name" {
-  description = "defualt redis parameter group"
-  default = "default.redis4.0"
+variable "s3_looker_bucket_name"  {
+  description = "looker bucket for looker shared directory"
 }
 
-variable "ec_port" {
-  description = "elasticache port"
-  default = 6379
+variable "s3_looker_log_bucket_name"  {
+  description = "looker bucket for looker logs"
 }
 
-variable "airflow_username" {
-  description = "Airflow username for website access"
-  default     = "airflow"
-}
-
-variable "airflow_emailaddress" {
-  description = "Airflow emailaddress for website access"
-}
-
-variable "airflow_password"  {
-  description = "Airflow password for website access"
-}
-
-variable "airflow_first"  {
-  description = "Airflow users first name for website access"
-}
-
-variable "airflow_last"  {
-  description = "Airflow users last name for website access"
-}
-
-variable "airflow_role"  {
-  description = "Airflow users role for website access. Roles can be Admin, User, Op, Viewer, and Public"
-}
-
-variable "s3_airflow_bucket_name"  {
-  description = "Airflow bucket for airflow shared directory"
-}
-
-variable "s3_airflow_log_bucket_name"  {
-  description = "Airflow bucket for airflow logs"
-}
-
-variable "s3_airflow_access_log_bucket_name"  {
-  description = "Airflow bucket for alb access logs"
+variable "s3_looker_access_log_bucket_name"  {
+  description = "looker bucket for alb access logs"
 }
 
 variable "waf_ip"  {
@@ -224,4 +180,16 @@ variable "secret_recovery_window_in_days" {
 
 variable "notification_email" {
   description="This email will receive sns notification from any resources that alarm.  It is required"
+}
+
+variable "looker_efs_security_group_id" {
+  description="Security group for looker"
+}
+
+variable "efs-subnet-mount1" {
+  description="Subnet to mount efs in 1"
+}
+
+variable "efs-subnet-mount2" {
+  description="Subnet to mount efs in 2"
 }
