@@ -3,8 +3,8 @@ terraform {
   required_version = ">=0.12.13"
   
   backend "s3" {
-    bucket = "tf-state-bravedev-non-prod-looker" # the terraform state bucket has to be hand entered unfortunately
-    key    = "tf_existing_net_rds_ec_ec2/terraform.tfstate"
+    bucket = "tf-state-looker" # the terraform state bucket has to be hand entered unfortunately
+    key    = "tf_existing_network/terraform.tfstate"
     region = "us-east-1"
   }
 }

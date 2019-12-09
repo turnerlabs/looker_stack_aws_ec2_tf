@@ -38,13 +38,6 @@ resource "aws_security_group" "looker_instance" {
   vpc_id      = "${var.vpc_id}"
 
   ingress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = ["${aws_security_group.looker_lb.id}"]
-  }
-
-  ingress {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
@@ -52,20 +45,21 @@ resource "aws_security_group" "looker_instance" {
   }
 
   ingress {
-    from_port       = 9999
-    to_port         = 9999
+    from_port       = "${var.node_listener_port}"
+    to_port         = "${var.node_listener_port}"
+    protocol        = "tcp"
+    security_groups = ["${aws_security_group.looker_lb.id}"]    
+  }
+
+  ingress {
+    from_port       = "${var.node_to_node_port}"
+    to_port         = "${var.node_to_node_port}"
     protocol        = "tcp"
   }
 
   ingress {
-    from_port       = 1551
-    to_port         = 1551
-    protocol        = "tcp"
-  }
-
-  ingress {
-    from_port       = 61616
-    to_port         = 61616
+    from_port       = "${var.queue_broker_port}"
+    to_port         = "${var.queue_broker_port}"
     protocol        = "tcp"
   }
 
@@ -141,6 +135,38 @@ resource "aws_security_group" "bastion_instance" {
 
   tags = {
     Name            = "${var.prefix}_bastion"
+    application     = "${var.tag_application}"
+    contact-email   = "${var.tag_contact_email}"
+    customer        = "${var.tag_customer}"
+    team            = "${var.tag_team}"
+    environment     = "${var.tag_environment}"
+  }
+}
+
+# EFS Security Group
+resource "aws_security_group" "looker_efs" {
+  depends_on  = ["aws_security_group.looker_instance"]
+
+  name        = "${var.prefix}_efs"
+  description = "Security group for access to efs mounts for looker"
+  vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    security_groups = ["${aws_security_group.looker_instance.id}"]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name            = "${var.prefix}_efs"
     application     = "${var.tag_application}"
     contact-email   = "${var.tag_contact_email}"
     customer        = "${var.tag_customer}"

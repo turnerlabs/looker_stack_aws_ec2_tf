@@ -3,6 +3,9 @@
 data "template_file" "looker-node-user-data" {
   template = "${file("looker_node_install.tpl")}"
   vars = {
+    s3_looker_bucket_name = "${aws_s3_bucket.s3_looker_bucket.id}"
+    db_region = "${var.region}"
+    looker_secret = "${aws_secretsmanager_secret.looker_sm_secret.id}"
     rds_url = "${aws_db_instance.looker_rds.address}"
     db_master_username = "${var.db_master_username}"
     db_master_password = "${var.db_master_password}"
@@ -11,17 +14,16 @@ data "template_file" "looker-node-user-data" {
     db_looker_dbname = "${var.db_looker_dbname}"
     db_port = "${var.db_port}"
     db_use_ssl = "${var.db_use_ssl}"
-    looker_secret = "${aws_secretsmanager_secret.looker_sm_secret.id}"
-    s3_looker_bucket_name = "${aws_s3_bucket.s3_looker_bucket.id}"
-    s3_looker_log_bucket_name = "${aws_s3_bucket.s3_looker_log_bucket.id}"
-    role_name = "${aws_iam_role.looker_instance.name}"
-    looker_username = "${var.looker_username}"
-    looker_emailaddress = "${var.looker_emailaddress}"
-    looker_password = "${var.looker_password}"
-    looker_first = "${var.looker_first}"
-    looker_last = "${var.looker_last}"
-    looker_role = "${var.looker_role}"
-    subdomain = "${var.subdomain}"
+    node_listener_port = "${var.node_listener_port}"
+    node_to_node_port = "${var.node_to_node_port}"
+    queue_broker_port = "${var.queue_broker_port}"
+    efs_mount_point = "${var.efs_mount_point}"
+    efs_dns_name = "${aws_efs_file_system.looker_clustered_efs.dns_name}"
+    scheduler_threads = "${var.scheduler_threads}"
+    unlimited_scheduler_threads = "${var.unlimited_scheduler_threads}"
+    scheduler_query_limit = "${var.scheduler_query_limit}"
+    per_user_query_limit = "${var.per_user_query_limit}"
+    scheduler_query_timeout = "${var.scheduler_query_timeout}"
   }
 }
 
@@ -38,7 +40,7 @@ resource "aws_launch_configuration" "lc_looker" {
   iam_instance_profile        = "${aws_iam_instance_profile.looker_s3_instance_profile.id}"
   
   ebs_block_device {
-    device_name                 = "looker-node"
+    device_name                 = "/dev/sdg"
     volume_type                 = "gp2"
     volume_size                 = 8
     encrypted                   = true

@@ -1,5 +1,5 @@
 resource "aws_iam_user_policy" "iam_user_policy" {
-  name = "${var.prefix}_looker_github_action"
+  name = "${var.prefix}_looker_backup"
   user = "${aws_iam_user.iam_user.name}"
 
   policy = <<EOF
@@ -12,7 +12,7 @@ resource "aws_iam_user_policy" "iam_user_policy" {
                 "s3:ListBucket"
             ],
             "Resource": [
-              "${aws_s3_bucket.s3_looker_bucket.arn}"
+              "${aws_s3_bucket.s3_looker_backup_bucket.arn}"
             ]
         },
         {
@@ -25,7 +25,7 @@ resource "aws_iam_user_policy" "iam_user_policy" {
                 "s3:DeleteObjectVersion"
             ],
             "Resource": [
-              "${aws_s3_bucket.s3_looker_bucket.arn}/*"
+              "${aws_s3_bucket.s3_looker_backup_bucket.arn}/*"
             ]
 
         }
@@ -36,7 +36,7 @@ EOF
 
 resource "aws_iam_user" "iam_user" {
     force_destroy = true
-    name = "srv_github_action_looker_${var.prefix}"
+    name = "srv_backup_looker_${var.prefix}"
 }
 
 resource "aws_iam_access_key" "iam_access_key" {

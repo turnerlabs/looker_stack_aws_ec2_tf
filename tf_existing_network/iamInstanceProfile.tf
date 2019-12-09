@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "looker_s3" {
             ],
             "Resource": [
               "${aws_s3_bucket.s3_looker_bucket.arn}",
-              "${aws_s3_bucket.s3_looker_log_bucket.arn}"
+              "${aws_s3_bucket.s3_looker_backup_bucket.arn}"
             ]
         },
         {
@@ -51,7 +51,7 @@ resource "aws_iam_role_policy" "looker_s3" {
             ],
             "Resource": [
               "${aws_s3_bucket.s3_looker_bucket.arn}/*",
-              "${aws_s3_bucket.s3_looker_log_bucket.arn}/*"
+              "${aws_s3_bucket.s3_looker_backup_bucket.arn}/*"
             ]
         }
 
@@ -106,14 +106,53 @@ resource "aws_iam_role_policy" "looker_secrets" {
         "Action": [
           "secretsmanager:GetSecretValue"
         ],
-        "Resource": [
-          "${aws_secretsmanager_secret.looker_sm_secret.id}"
-        ]
+        "Resource": "${aws_secretsmanager_secret.looker_sm_secret.id}"
       }
    ]
 }
 EOF
 }
+
+
+# IAM EFS Role Policy
+
+resource "aws_iam_role_policy" "looker_efs" {
+  depends_on  = ["aws_iam_role.looker_instance", ]
+
+  name = "${var.prefix}_efs"
+  role = "${aws_iam_role.looker_instance.name}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid" : "Stmt1CreateMountTargetAndTag",
+      "Effect": "Allow",
+      "Action": [
+        "elasticfilesystem:CreateMountTarget",
+        "elasticfilesystem:DescribeMountTargets",
+        "elasticfilesystem:CreateTags",
+        "elasticfilesystem:DescribeTags"
+      ],
+      "Resource": "${aws_efs_file_system.looker_clustered_efs.arn}"
+    },
+    {
+      "Sid" : "Stmt2AdditionalEC2PermissionsToCreateMountTarget",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeSubnets",
+        "ec2:CreateNetworkInterface",
+        "ec2:DescribeNetworkInterfaces"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+
 
 
 # IAM Instance Profile

@@ -41,13 +41,14 @@ variable "prefix" {
 
 variable "availability_zone_1" {
   description = "az 1 of 2 azs"
-  default     = "us-east-1c"
+  default     = "us-east-1a"
 }
 
 variable "availability_zone_2" {
   description = "az 2 of 2 azs"
-  default     = "us-east-1d"
+  default     = "us-east-1c"
 }
+
 variable "looker_bastion_ami" {
   description = "looker Bastion AMI created by packer"
 }
@@ -58,7 +59,7 @@ variable "looker_node_ami" {
 
 variable "looker_node_instance_class" {
   description = "looker instance size"
-  default     = "m4.xlarge"
+  default     = "m3.medium" 
 }
 
 variable "looker_keypair_name" {
@@ -94,7 +95,7 @@ variable "db_looker_username" {
 
 variable "db_looker_dbname" {
   description = "MYSQL looker database name"
-  default     = "looker"
+  default     = "looker_db"
 }
 
 variable "db_engine_version" {
@@ -104,40 +105,15 @@ variable "db_engine_version" {
 
 variable "db_instance_class" {
   description = "MYSQL looker instance class"
-  default     = "db.m5.2xlarge"
-}
-
-variable "looker_username" {
-  description = "looker username for website access"
-  default     = "looker"
-}
-
-variable "looker_emailaddress" {
-  description = "looker emailaddress for website access"
-}
-
-variable "looker_password"  {
-  description = "looker password for website access"
-}
-
-variable "looker_first"  {
-  description = "looker users first name for website access"
-}
-
-variable "looker_last"  {
-  description = "looker users last name for website access"
-}
-
-variable "looker_role"  {
-  description = "looker users role for website access. Roles can be Admin, User, Op, Viewer, and Public"
+  default     = "db.m5.large"
 }
 
 variable "s3_looker_bucket_name"  {
   description = "looker bucket for looker shared directory"
 }
 
-variable "s3_looker_log_bucket_name"  {
-  description = "looker bucket for looker logs"
+variable "s3_looker_backup_bucket_name"  {
+  description = "looker bucket for looker backups"
 }
 
 variable "s3_looker_access_log_bucket_name"  {
@@ -182,14 +158,47 @@ variable "notification_email" {
   description="This email will receive sns notification from any resources that alarm.  It is required"
 }
 
-variable "looker_efs_security_group_id" {
+variable "efs_mount_point" {
   description="Security group for looker"
+  default="/mnt/lookerfiles"
 }
 
-variable "efs-subnet-mount1" {
-  description="Subnet to mount efs in 1"
+variable "node_listener_port" {
+  description="Node listener port for looker nodes"
+  default="9999"
 }
 
-variable "efs-subnet-mount2" {
-  description="Subnet to mount efs in 2"
+variable "node_to_node_port" {
+  description="Node to node communication port for looker nodes"
+  default="1551"
+}
+
+variable "queue_broker_port" {
+  description="Queue broker port for looker node"
+  default="61616"
+}
+
+variable "scheduler_threads" {
+  description="Number of simultaneous scheduled tasks"
+  default="20"
+}
+
+variable "unlimited_scheduler_threads" {
+  description="Number of simultaneous unlimited scheduled tasks"
+  default="15"
+}
+
+variable "scheduler_query_limit" {
+  description="Limits number of concurrent scheduled queries"
+  default="30"
+}
+
+variable "per_user_query_limit" {
+  description="Limits number of concurrent queries per user"
+  default="40"
+}
+
+variable "scheduler_query_timeout" {
+  description="Length of scheduler timeout to wait for connection"
+  default="3600"
 }

@@ -1,10 +1,10 @@
-# S3 looker log Bucket
-resource "aws_s3_bucket" "s3_looker_log_bucket" {
-  bucket        = "${var.prefix}-${var.s3_looker_log_bucket_name}"
+# S3 looker backup Bucket
+resource "aws_s3_bucket" "s3_looker_backup_bucket" {
+  bucket        = "${var.prefix}-${var.s3_looker_backup_bucket_name}"
   force_destroy = "true"
 
   lifecycle_rule {
-    id      = "looker_task_log"
+    id      = "looker_backup_log"
     enabled = true
 
     transition {
