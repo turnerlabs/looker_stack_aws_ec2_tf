@@ -15,12 +15,12 @@ resource "aws_efs_file_system" "looker_clustered_efs" {
 }
 
 resource "aws_efs_mount_target" "looker_clustered_efs_mount1" {
-  file_system_id  = "${aws_efs_file_system.looker_clustered_efs.id}"
-  subnet_id       = "${var.private_subnet1_id}"
+  file_system_id  = aws_efs_file_system.looker_clustered_efs.id
+  subnet_id       = var.private_subnet1_id
   security_groups = [ "${aws_security_group.looker_efs.id}" ]
 }
 resource "aws_efs_mount_target" "looker_clustered_efs_mount2" {
-  file_system_id  = "${aws_efs_file_system.looker_clustered_efs.id}"
-  subnet_id       = "${var.private_subnet2_id}"
+  file_system_id  = aws_efs_file_system.looker_clustered_efs.id
+  subnet_id       = var.private_subnet2_id
   security_groups = [ "${aws_security_group.looker_efs.id}" ]
 }

@@ -69,11 +69,9 @@ if [ ! -e "/home/looker/looker/sm_update.sh" ]; then
     echo "############# Generate sm_update.sh #############"
 fi
 
-# Use metadata services to get private ip address
-# https://cloudinit.readthedocs.io/en/latest/topics/datasources/ec2.html
 # Determine the IP address of this instance so that it can be registered in the cluster
 export IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/')
-echo "LOOKERARGS=\"--clustered -H $IP -p ${node_listener_port} -n ${node_to_node_port} -q "${queue_broker_port}" -d /home/looker/looker/looker-db.yml --shared-storage-dir ${efs_mount_point} --scheduler-threads=${scheduler_threads} --unlimited-scheduler-threads=${unlimited_scheduler_threads} --scheduler-query-limit=${scheduler_query_limit} --per-user-query-limit=${per_user_query_limit} --scheduler-query-timeout=${scheduler_query_timeout} --log-to-file=true\"" | sudo tee -a /home/looker/looker/lookerstart.cfg
+echo "LOOKERARGS=\"--clustered --no-ssl --prefer-ipv4 -H $IP -p ${node_listener_port} -n ${node_to_node_port} -q "${queue_broker_port}" -d /home/looker/looker/looker-db.yml --shared-storage-dir ${efs_mount_point} --scheduler-threads=${scheduler_threads} --unlimited-scheduler-threads=${unlimited_scheduler_threads} --scheduler-query-limit=${scheduler_query_limit} --per-user-query-limit=${per_user_query_limit} --scheduler-query-timeout=${scheduler_query_timeout} --log-to-file=true\"" | sudo tee -a /home/looker/looker/lookerstart.cfg
 
 sudo chown -R looker:looker /home/looker/looker/
 chmod 700 /home/looker/looker/sm_update.sh
@@ -81,7 +79,7 @@ chmod 700 /home/looker/looker/sm_update.sh
 echo "############# Apply owndership and execution priviliges #############"
 
 sudo mkdir -p ${efs_mount_point}
-echo "${efs_dns_name}:/ ${efs_mount_point} nfs nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,nosuid,nolock" | sudo tee -a /etc/fstab
+echo "${efs_dns_name}:/ ${efs_mount_point} efs" | sudo tee -a /etc/fstab
 sudo mount -a
 sudo chown looker:looker ${efs_mount_point}
 cat /proc/mounts | grep looker

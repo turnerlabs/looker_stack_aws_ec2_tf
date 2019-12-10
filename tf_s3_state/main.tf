@@ -1,20 +1,20 @@
 terraform {
-  required_version = ">=0.12.13"
+  required_version = ">=0.12.17"
 }
 
 provider "aws" {
   version = "~> 2.35.0"
-  region  = "${var.region}"
-  profile = "${var.profile}"
+  region  = var.region
+  profile = var.profile
 }
 
 # create an s3 bucket
 resource "aws_s3_bucket" "bucket" {
-  bucket        = "${var.bucket_name}"
+  bucket        = var.bucket_name
   force_destroy = "true"
 
   versioning {
-    enabled = "${var.versioning}"
+    enabled = var.versioning
   }
 
   tags = {

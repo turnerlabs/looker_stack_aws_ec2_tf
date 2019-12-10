@@ -15,6 +15,6 @@ resource "aws_secretsmanager_secret" "looker_sm_secret" {
 }
 
 resource "aws_secretsmanager_secret_version" "looker_sm_secret_version" {
-  secret_id     = "${aws_secretsmanager_secret.looker_sm_secret.id}"
-  secret_string = "${random_string.looker_rds_password.result}"
+  secret_id     = aws_secretsmanager_secret.looker_sm_secret.id
+  secret_string = random_string.looker_rds_password.result
 }

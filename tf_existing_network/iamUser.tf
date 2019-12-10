@@ -1,6 +1,6 @@
 resource "aws_iam_user_policy" "iam_user_policy" {
   name = "${var.prefix}_looker_backup"
-  user = "${aws_iam_user.iam_user.name}"
+  user = aws_iam_user.iam_user.name
 
   policy = <<EOF
 {
@@ -40,5 +40,5 @@ resource "aws_iam_user" "iam_user" {
 }
 
 resource "aws_iam_access_key" "iam_access_key" {
-  user = "${aws_iam_user.iam_user.name}"
+  user = aws_iam_user.iam_user.name
 }

@@ -13,8 +13,6 @@ resource "aws_sns_topic" "looker_sns_notifications" {
 # RDS MySQL(CPU, Free Storage, and Disk Queue) - connections vary by db type so that's not a good alarm.
 
 resource "aws_cloudwatch_metric_alarm" "looker_rds_cpu_utilization_too_high" {
-  depends_on          = ["aws_db_instance.looker_rds"]
-
   alarm_name          = "${var.prefix}_looker_rds_cpu_utilization_too_high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -32,8 +30,6 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_cpu_utilization_too_high" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "looker_rds_free_storage_space_too_low" {
-  depends_on          = ["aws_db_instance.looker_rds"]
-
   alarm_name          = "${var.prefix}_looker_rds_free_storage_space_threshold"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "1"
@@ -51,8 +47,6 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_free_storage_space_too_low" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "looker_rds_disk_queue_depth_too_high" {
-  depends_on          = ["aws_db_instance.looker_rds"]
-
   alarm_name          = "${var.prefix}_looker_rds_disk_queue_depth_too_high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -72,8 +66,6 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_disk_queue_depth_too_high" {
 # ASG on Looker Node(CPUUtilization)
 
 resource "aws_cloudwatch_metric_alarm" "looker_asg_looker_cpu_utilization_too_high" {
-  depends_on          = ["aws_autoscaling_group.asg_looker"]
-
   alarm_name          = "${var.prefix}_looker_asg_cpu_utilization_too_high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
@@ -93,8 +85,6 @@ resource "aws_cloudwatch_metric_alarm" "looker_asg_looker_cpu_utilization_too_hi
 # WAF(Blocked Requests)
 
 resource "aws_cloudwatch_metric_alarm" "looker_waf_blocked_requests" {
-  depends_on    = ["aws_wafregional_web_acl.looker_waf_web_acl"]
-
   alarm_name          = "${var.prefix}_looker_waf_blocked_requests"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"

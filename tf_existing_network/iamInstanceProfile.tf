@@ -2,7 +2,7 @@
 
 resource "aws_iam_role" "looker_instance" {
 
-  name = "${var.prefix}_instance"
+  name = format("%s_instance", var.prefix)
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -23,10 +23,8 @@ EOF
 # IAM S3 Role Policy
 
 resource "aws_iam_role_policy" "looker_s3" {
-  depends_on  = ["aws_iam_role.looker_instance"]
-
   name = "${var.prefix}_s3"
-  role = "${aws_iam_role.looker_instance.name}"
+  role = aws_iam_role.looker_instance.name
 
   policy = <<EOF
 {
@@ -63,10 +61,8 @@ EOF
 # IAM Logs Role Policy
 
 resource "aws_iam_role_policy" "looker_logs" {
-  depends_on  = ["aws_iam_role.looker_instance"]
-
   name = "${var.prefix}_logs"
-  role = "${aws_iam_role.looker_instance.name}"
+  role = aws_iam_role.looker_instance.name
 
   policy = <<EOF
 {
@@ -92,10 +88,8 @@ EOF
 # IAM Secrets Manager Role Policy
 
 resource "aws_iam_role_policy" "looker_secrets" {
-  depends_on  = ["aws_iam_role.looker_instance"]
-
   name = "${var.prefix}_secrets"
-  role = "${aws_iam_role.looker_instance.name}"
+  role = aws_iam_role.looker_instance.name
 
   policy = <<EOF
 {
@@ -117,10 +111,8 @@ EOF
 # IAM EFS Role Policy
 
 resource "aws_iam_role_policy" "looker_efs" {
-  depends_on  = ["aws_iam_role.looker_instance", ]
-
   name = "${var.prefix}_efs"
-  role = "${aws_iam_role.looker_instance.name}"
+  role = aws_iam_role.looker_instance.name
 
   policy = <<EOF
 {
@@ -158,15 +150,13 @@ EOF
 # IAM Instance Profile
 
 resource "aws_iam_instance_profile" "looker_s3_instance_profile" {
-  depends_on  = ["aws_iam_role.looker_instance", "aws_iam_role_policy.looker_s3", "aws_iam_role_policy.looker_logs"]
-  
   name = "${var.prefix}_instance_profile"
-  role = "${aws_iam_role.looker_instance.name}"
+  role = aws_iam_role.looker_instance.name
 }
 
 # SSM Policy for cloudwatch logs
 
 resource "aws_iam_role_policy_attachment" "looker_ssm_managed_policy_attachment" {
-  role = "${aws_iam_role.looker_instance.name}"
+  role = aws_iam_role.looker_instance.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }

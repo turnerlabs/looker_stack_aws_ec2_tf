@@ -4,43 +4,40 @@ data "template_file" "looker-node-user-data" {
   template = "${file("looker_node_install.tpl")}"
   vars = {
     s3_looker_bucket_name = "${aws_s3_bucket.s3_looker_bucket.id}"
-    db_region = "${var.region}"
+    db_region = var.region
     looker_secret = "${aws_secretsmanager_secret.looker_sm_secret.id}"
     rds_url = "${aws_db_instance.looker_rds.address}"
-    db_master_username = "${var.db_master_username}"
-    db_master_password = "${var.db_master_password}"
-    db_looker_username = "${var.db_looker_username}"
-    db_looker_password = "${random_string.looker_rds_password.result}"
-    db_looker_dbname = "${var.db_looker_dbname}"
-    db_port = "${var.db_port}"
-    db_use_ssl = "${var.db_use_ssl}"
-    node_listener_port = "${var.node_listener_port}"
-    node_to_node_port = "${var.node_to_node_port}"
-    queue_broker_port = "${var.queue_broker_port}"
-    efs_mount_point = "${var.efs_mount_point}"
-    efs_dns_name = "${aws_efs_file_system.looker_clustered_efs.dns_name}"
-    scheduler_threads = "${var.scheduler_threads}"
-    unlimited_scheduler_threads = "${var.unlimited_scheduler_threads}"
-    scheduler_query_limit = "${var.scheduler_query_limit}"
-    per_user_query_limit = "${var.per_user_query_limit}"
-    scheduler_query_timeout = "${var.scheduler_query_timeout}"
+    db_master_username = var.db_master_username
+    db_master_password = var.db_master_password
+    db_looker_username = var.db_looker_username
+    db_looker_password = random_string.looker_rds_password.result
+    db_looker_dbname = var.db_looker_dbname
+    db_port = var.db_port
+    db_use_ssl = var.db_use_ssl
+    node_listener_port = var.node_listener_port
+    node_to_node_port = var.node_to_node_port
+    queue_broker_port = var.queue_broker_port
+    efs_mount_point = var.efs_mount_point
+    efs_dns_name = aws_efs_file_system.looker_clustered_efs.dns_name
+    scheduler_threads = var.scheduler_threads
+    unlimited_scheduler_threads = var.unlimited_scheduler_threads
+    scheduler_query_limit = var.scheduler_query_limit
+    per_user_query_limit = var.per_user_query_limit
+    scheduler_query_timeout = var.scheduler_query_timeout
   }
 }
 
 resource "aws_launch_configuration" "lc_looker" {
-  depends_on                  = ["aws_db_instance.looker_rds", "aws_security_group.looker_instance", "aws_iam_instance_profile.looker_s3_instance_profile","aws_s3_bucket.s3_looker_bucket"]
-
   name                        = "${var.prefix}_lc_looker"
   associate_public_ip_address = false
-  image_id                    = "${var.looker_node_ami}"
-  instance_type               = "${var.looker_node_instance_class}"
-  key_name                    = "${var.looker_keypair_name}"
+  image_id                    = var.looker_node_ami
+  instance_type               = var.looker_node_instance_class
+  key_name                    = var.looker_keypair_name
   security_groups             = ["${aws_security_group.looker_instance.id}"]
-  user_data                   = "${data.template_file.looker-node-user-data.rendered}"
-  iam_instance_profile        = "${aws_iam_instance_profile.looker_s3_instance_profile.id}"
-  
-  ebs_block_device {
-    device_name                 = "/dev/sdg"
+  user_data                   = data.template_file.looker-node-user-data.rendered
+  iam_instance_profile        = aws_iam_instance_profile.looker_s3_instance_profile.id
+
+  root_block_device {
     volume_type                 = "gp2"
     volume_size                 = 8
     encrypted                   = true
@@ -49,14 +46,12 @@ resource "aws_launch_configuration" "lc_looker" {
 }
 
 resource "aws_autoscaling_group" "asg_looker" {
-  depends_on                = ["aws_launch_configuration.lc_looker", "aws_lb_target_group.looker_lb_tg"]
-
   name                      = "${var.prefix}_asg_looker"
-  vpc_zone_identifier       = ["${var.private_subnet1_id}", "${var.private_subnet2_id}"]  
-  launch_configuration      = "${aws_launch_configuration.lc_looker.id}"
-  max_size                  = "7"
-  min_size                  = "3"
-  desired_capacity          = "3"
+  vpc_zone_identifier       = [var.private_subnet1_id, var.private_subnet2_id]  
+  launch_configuration      = aws_launch_configuration.lc_looker.id
+  max_size                  = "5"
+  min_size                  = "1"
+  desired_capacity          = "1"
   health_check_grace_period = 300
   health_check_type         = "EC2"
   termination_policies      = ["OldestInstance", "OldestLaunchConfiguration"]
@@ -70,31 +65,31 @@ resource "aws_autoscaling_group" "asg_looker" {
 
   tag {
     key                 = "application"
-    value               = "${var.tag_application}"
+    value               = var.tag_application
     propagate_at_launch = true
   }
 
   tag {
     key                 = "contact-email"
-    value               = "${var.tag_contact_email}"
+    value               = var.tag_contact_email
     propagate_at_launch = true
   }
 
   tag {
     key                 = "customer"
-    value               = "${var.tag_customer}"
+    value               = var.tag_customer
     propagate_at_launch = true
   }
 
   tag {
     key                 = "team"
-    value               = "${var.tag_team}"
+    value               = var.tag_team
     propagate_at_launch = true
   }
 
   tag {
     key                 = "environment"
-    value               = "${var.tag_environment}"
+    value               = var.tag_environment
     propagate_at_launch = true
   }
 }

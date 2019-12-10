@@ -174,31 +174,29 @@ resource "aws_db_subnet_group" "looker_rds_subnet_grp" {
 # }
 
 resource "aws_db_instance" "looker_rds" {
-  depends_on                            = ["aws_db_subnet_group.looker_rds_subnet_grp", "aws_security_group.looker_rds"]
-
   allocated_storage                     = 150
   allow_major_version_upgrade           = false
   auto_minor_version_upgrade            = true
   backup_retention_period               = 7
   backup_window                         = "00:00-01:30"
   copy_tags_to_snapshot                 = true
-  db_subnet_group_name                  = "${aws_db_subnet_group.looker_rds_subnet_grp.id}"
+  db_subnet_group_name                  = aws_db_subnet_group.looker_rds_subnet_grp.id
   deletion_protection                   = true
   engine                                = "mysql"
-  engine_version                        = "${var.db_engine_version}"
+  engine_version                        = var.db_engine_version
   iam_database_authentication_enabled   = false
   identifier                            = "${var.prefix}-${var.db_identifier}-instance"
-  instance_class                        = "${var.db_instance_class}"
+  instance_class                        = var.db_instance_class
   max_allocated_storage                 = 1000
   multi_az                              = true
   parameter_group_name                  = "default.mysql5.7"
-  password                              = "${var.db_master_password}"
-  port                                  = "${var.db_port}"
+  password                              = var.db_master_password
+  port                                  = var.db_port
   publicly_accessible                   = false
   skip_final_snapshot                   = "false"
   storage_type                          = "gp2"
   storage_encrypted                     = true
-  username                              = "${var.db_master_username}"
+  username                              = var.db_master_username
   vpc_security_group_ids                = ["${aws_security_group.looker_rds.id}"]
 
   tags = {
