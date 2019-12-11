@@ -86,11 +86,13 @@ cat /proc/mounts | grep looker
 
 echo "############# Mount EFS #############"
 
+sudo systemctl enable datadog-agent.service
 sudo systemctl enable looker.service
 sudo systemctl daemon-reload
 
-echo "############# Enabled looker systemd #############"
+echo "############# Enabled looker and datadog systemd #############"
 
+sudo systemctl start datadog-agent.service
 sudo systemctl start looker
 
 echo "############# Started up looker service #############"
