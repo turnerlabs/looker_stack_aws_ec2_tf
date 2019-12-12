@@ -10,7 +10,7 @@ resource "random_string" "looker_rds_password" {
 }
 
 resource "aws_secretsmanager_secret" "looker_sm_secret" {
-  name                    = "${var.prefix}_looker_user_pass"
+  name                    = "${var.prefix}_looker_user_password"
   recovery_window_in_days = 0 # make this configurable
 }
 

@@ -15,7 +15,7 @@ export RDS_KEY=$token
 
 echo "############# Set initial environment variables for cron and systemd #############"
 
-aws s3 cp s3://${s3_looker_bucket_name}/looker-db.yml /home/ubuntu/looker/looker-db.yml --recursive --quiet
+aws s3 cp s3://${s3_looker_bucket_name}/looker-db.yml /home/looker/looker/looker-db.yml --recursive --quiet
 aws s3 cp s3://${s3_looker_bucket_name}/sm_update.sh /home/looker/looker/sm_update.sh --recursive --quiet
 
 echo "############# Copy important files from s3 locally #############"
