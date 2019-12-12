@@ -11,13 +11,13 @@ It creates the following resources in AWS:
 - 1 Subdomain created in Route53
 - 1 SSL cert is created using ACM
 - 1 Secret Manager key is created for access from the Looker Node instance(s) to the RDS instance.
-- 1 MySQL RDS database
-- 1 MySQL RDS Read replica
+- 1 MySQL RDS database using MultiAZ
 - 2 Security groups
   - 1 for RDS access
   - 1 for Looker instance access
 - 1 Launch Config using Looker Node AMI
 - 1 Auto Scale Group for Looker Node
+- 1 EC2 Bastion Server
 
 The Looker instances will be able to communicate with each other as well as RDS MySQL.
 
