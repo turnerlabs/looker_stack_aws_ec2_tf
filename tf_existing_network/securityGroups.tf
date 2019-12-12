@@ -48,19 +48,21 @@ resource "aws_security_group" "looker_instance" {
     from_port       = var.node_listener_port
     to_port         = var.node_listener_port
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.looker_lb.id}"]    
+    security_groups = ["${aws_security_group.looker_lb.id}"]
   }
 
   ingress {
     from_port       = var.node_to_node_port
     to_port         = var.node_to_node_port
     protocol        = "tcp"
+    cidr_blocks     = ["10.0.0.0/8"]
   }
 
   ingress {
     from_port       = var.queue_broker_port
     to_port         = var.queue_broker_port
     protocol        = "tcp"
+    cidr_blocks     = ["10.0.0.0/8"]
   }
 
   egress {

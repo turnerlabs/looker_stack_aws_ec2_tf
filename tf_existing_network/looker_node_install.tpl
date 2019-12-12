@@ -15,8 +15,15 @@ export RDS_KEY=$token
 
 echo "############# Set initial environment variables for cron and systemd #############"
 
-aws s3 cp s3://${s3_looker_bucket_name}/looker-db.yml /home/looker/looker/looker-db.yml --recursive --quiet
-aws s3 cp s3://${s3_looker_bucket_name}/sm_update.sh /home/looker/looker/sm_update.sh --recursive --quiet
+if [ "`aws s3 ls s3://${s3_looker_bucket_name}/sm_update.sh`" != "" ]; then
+    echo "############# sm_update.sh found and copied from s3 #############"
+    aws s3 cp s3://${s3_looker_bucket_name}/sm_update.sh /home/looker/looker/sm_update.sh --quiet
+fi
+
+if [ "`aws s3 ls s3://${s3_looker_bucket_name}/looker-db.yml`" != "" ]; then
+    echo "############# looker-db.yml found and copied from s3 #############"
+    aws s3 cp s3://${s3_looker_bucket_name}/looker-db.yml /home/looker/looker/looker-db.yml --quiet  
+fi
 
 echo "############# Copy important files from s3 locally #############"
 
@@ -29,7 +36,7 @@ if [ ! -e "/home/looker/looker/looker-db.yml" ]; then
     echo "############# Completed database setup #############"
 
 # Create the database credentials file
-cat <<EOT | sudo tee -a /home/looker/looker/looker-db.yml
+cat <<EOT | tee -a /home/looker/looker/looker-db.yml
 host: ${rds_url}
 username: ${db_looker_username}
 password: ${db_looker_password}
@@ -39,10 +46,10 @@ port: ${db_port}
 ssl: ${db_use_ssl}
 EOT
 
-    chown -R looker:looker /home/ubuntu/looker
+    chown -R looker:looker /home/looker/looker
     chmod 600 /home/looker/looker/looker-db.yml
 
-    aws s3 cp /home/looker/looker/looker-db.yml s3://${s3_looker_bucket_name}/looker-db-yml --quiet
+    aws s3 cp /home/looker/looker/looker-db.yml s3://${s3_looker_bucket_name}/looker-db.yml --quiet
 
     echo "############# Generated looker-db.yml file #############"
 fi
@@ -73,26 +80,27 @@ fi
 export IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/')
 echo "LOOKERARGS=\"--clustered --no-ssl --prefer-ipv4 -H $IP -p ${node_listener_port} -n ${node_to_node_port} -q "${queue_broker_port}" -d /home/looker/looker/looker-db.yml --shared-storage-dir ${efs_mount_point} --scheduler-threads=${scheduler_threads} --unlimited-scheduler-threads=${unlimited_scheduler_threads} --scheduler-query-limit=${scheduler_query_limit} --per-user-query-limit=${per_user_query_limit} --scheduler-query-timeout=${scheduler_query_timeout} --log-to-file=true\"" | sudo tee -a /home/looker/looker/lookerstart.cfg
 
-sudo chown -R looker:looker /home/looker/looker/
+chown -R looker:looker /home/looker/looker/
 chmod 700 /home/looker/looker/sm_update.sh
+chmod 600 /home/looker/looker/looker-db.yml
 
 echo "############# Apply owndership and execution priviliges #############"
 
-sudo mkdir -p ${efs_mount_point}
+mkdir -p ${efs_mount_point}
 echo "${efs_dns_name}:/ ${efs_mount_point} efs" | sudo tee -a /etc/fstab
-sudo mount -a
-sudo chown looker:looker ${efs_mount_point}
+mount -a
+chown looker:looker ${efs_mount_point}
 cat /proc/mounts | grep looker
 
 echo "############# Mount EFS #############"
 
-sudo systemctl enable datadog-agent.service
-sudo systemctl enable looker.service
-sudo systemctl daemon-reload
+systemctl enable datadog-agent.service
+systemctl enable looker.service
+systemctl daemon-reload
 
 echo "############# Enabled looker and datadog systemd #############"
 
-sudo systemctl start datadog-agent.service
-sudo systemctl start looker
+systemctl start datadog-agent.service
+systemctl start looker
 
 echo "############# Started up looker service #############"
