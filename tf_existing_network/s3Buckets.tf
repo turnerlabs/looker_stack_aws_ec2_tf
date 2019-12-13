@@ -3,25 +3,6 @@ resource "aws_s3_bucket" "s3_looker_backup_bucket" {
   bucket        = "${var.prefix}-${var.s3_looker_backup_bucket_name}"
   force_destroy = "true"
 
-  lifecycle_rule {
-    id      = "looker_backup_log"
-    enabled = true
-
-    transition {
-      days          = 30
-      storage_class = "STANDARD_IA"
-    }
-
-    transition {
-      days          = 60
-      storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = 180
-    }
-  }
-
   tags = {
     application     = "${var.tag_application}"
     contact-email   = "${var.tag_contact_email}"

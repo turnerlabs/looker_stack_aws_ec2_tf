@@ -39,18 +39,12 @@ variable "prefix" {
   description = "Name to prefix all the items with"
 }
 
-variable "availability_zone_1" {
-  description = "az 1 of 2 azs"
-  default     = "us-east-1a"
-}
-
-variable "availability_zone_2" {
-  description = "az 2 of 2 azs"
-  default     = "us-east-1b"
-}
-
 variable "looker_bastion_ami" {
   description = "looker Bastion AMI created by packer"
+}
+
+variable "looker_backup_ami" {
+  description = "looker Backup AMI created by packer"
 }
 
 variable "looker_node_ami" {
