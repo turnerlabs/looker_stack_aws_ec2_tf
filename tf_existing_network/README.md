@@ -76,15 +76,6 @@ variable "prefix" {
   description = "Name to prefix all the resources with"
 }
 
-variable "availability_zone_1" {
-  description = "az 1 of 2 azs"
-  default     = "us-east-1c"
-}
-
-variable "availability_zone_2" {
-  description = "az 2 of 2 azs"
-  default     = "us-east-1d"
-}
 variable "looker_node_ami" {
   description = "looker Webserver / Scheduler AMI created by packer"
 }

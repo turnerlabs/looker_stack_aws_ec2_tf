@@ -1,10 +1,5 @@
 #!/bin/bash -xe
 
-echo "S3_looker_BUCKET=${s3_looker_bucket_name}" >> /etc/environment
-echo "S3_looker_BUCKET=${s3_looker_bucket_name}" >> /etc/profile.d/looker.sh
-
-export S3_looker_BUCKET=${s3_looker_bucket_name}
-
 secret=`aws secretsmanager get-secret-value --region ${db_region} --secret-id ${looker_secret}`
 token=$(echo $secret | jq -r .SecretString)
 
