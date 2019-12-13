@@ -46,7 +46,7 @@ variable "availability_zone_1" {
 
 variable "availability_zone_2" {
   description = "az 2 of 2 azs"
-  default     = "us-east-1c"
+  default     = "us-east-1b"
 }
 
 variable "looker_bastion_ami" {
