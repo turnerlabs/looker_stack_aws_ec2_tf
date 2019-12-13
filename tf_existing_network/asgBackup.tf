@@ -11,7 +11,7 @@ data "template_file" "backup-node-user-data" {
 resource "aws_launch_configuration" "lc_backup" {
   name                        = "${var.prefix}_lc_backup"
   associate_public_ip_address = false
-  image_id                    = var.backup_node_ami
+  image_id                    = var.looker_backup_ami
   instance_type               = var.backup_node_instance_class
   key_name                    = var.looker_keypair_name
   security_groups             = ["${aws_security_group.looker_instance.id}"]
@@ -24,24 +24,6 @@ resource "aws_launch_configuration" "lc_backup" {
     encrypted                   = true
     delete_on_termination       = true
   }
-}
-
-resource "aws_autoscaling_schedule" "asg_schedule_backup_start" {
-  scheduled_action_name  = "backup_efs_start"
-  min_size               = 1
-  max_size               = 1
-  desired_capacity       = 1
-  recurrence = "00 02 * * 1-7" #On at 10PM EST
-  autoscaling_group_name = "${aws_autoscaling_group.asg_backup.name}"
-}
-
-resource "aws_autoscaling_schedule" "asg_schedule_backup_finish" {
-  scheduled_action_name  = "backup_efs_finish"
-  min_size               = 0
-  max_size               = 0
-  desired_capacity       = 0
-  recurrence = "00 03 * * 1-7" #Off at 11PM EST
-  autoscaling_group_name = "${aws_autoscaling_group.asg_backup.name}"
 }
 
 resource "aws_autoscaling_group" "asg_backup" {
@@ -91,4 +73,22 @@ resource "aws_autoscaling_group" "asg_backup" {
     value               = var.tag_environment
     propagate_at_launch = true
   }
+}
+
+resource "aws_autoscaling_schedule" "asg_schedule_backup_start" {
+  scheduled_action_name  = "backup_efs_start"
+  min_size               = 1
+  max_size               = 1
+  desired_capacity       = 1
+  recurrence = "00 02 * * 1-7" #On at 10PM EST
+  autoscaling_group_name = aws_autoscaling_group.asg_backup.name
+}
+
+resource "aws_autoscaling_schedule" "asg_schedule_backup_finish" {
+  scheduled_action_name  = "backup_efs_finish"
+  min_size               = 0
+  max_size               = 0
+  desired_capacity       = 0
+  recurrence = "00 03 * * 1-7" #Off at 11PM EST
+  autoscaling_group_name = aws_autoscaling_group.asg_backup.name
 }

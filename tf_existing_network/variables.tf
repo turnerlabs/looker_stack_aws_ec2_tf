@@ -56,6 +56,11 @@ variable "looker_node_instance_class" {
   default     = "m3.medium" 
 }
 
+variable "backup_node_instance_class" {
+  description = "backup instance size"
+  default     = "t3.small" 
+}
+
 variable "looker_keypair_name" {
   description = "AWS keypair to use on the looker ec2 instance"
 }
