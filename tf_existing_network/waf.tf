@@ -7,6 +7,11 @@ resource "aws_wafregional_ipset" "looker_waf_ipset" {
     type  = "IPV4"
     value = var.waf_ip
   }
+
+  ip_set_descriptor {
+    type  = "IPV4"
+    value = var.waf_looker_support_ip
+  }
 }
 
 resource "aws_wafregional_rule" "looker_waf_rule" {
