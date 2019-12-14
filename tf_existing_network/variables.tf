@@ -123,6 +123,11 @@ variable "waf_ip"  {
   description = "instance ingress ip to allow"
 }
 
+variable "waf_looker_support_ip"  {
+  description = "instance ingress ip to allow"
+  default ="54.209.194.236/32"
+}
+
 variable "ingress_ips"  {
   description = "instance ingress ip to allow"
 }
