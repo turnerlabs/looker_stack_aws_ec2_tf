@@ -35,8 +35,17 @@ EOF
 }
 
 resource "aws_iam_user" "iam_user" {
-    force_destroy = true
-    name = "srv_backup_looker_${var.prefix}"
+  force_destroy = true
+  name = "srv_backup_looker_${var.prefix}"
+
+  tags = {
+    Name            = "${var.prefix}_looker_iam_user"
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
 }
 
 resource "aws_iam_access_key" "iam_access_key" {

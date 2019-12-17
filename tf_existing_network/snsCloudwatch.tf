@@ -3,6 +3,15 @@
 resource "aws_sns_topic" "looker_sns_notifications" {
   name = "looker_sns_notifications"
 
+  tags = {
+    Name            = "${var.prefix}_looker_sns_notif"
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
+
   provisioner "local-exec" {
     command = "aws sns subscribe --topic-arn ${aws_sns_topic.looker_sns_notifications.arn} --protocol email --notification-endpoint ${var.notification_email}"
   }
@@ -24,6 +33,14 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_cpu_utilization_too_high" {
   alarm_description   = "Average RDS CPU utilization has been over 80% for the last 10 minutes."
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
 
+  tags = {
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
+
   dimensions = {
     DBInstanceIdentifier = "${aws_db_instance.looker_rds.id}"
   }
@@ -41,6 +58,14 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_free_storage_space_too_low" {
   alarm_description   = "Average RDS free storage space has been less than 2 gigabyte for the last 10 minutes."
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
 
+  tags = {
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
+
   dimensions = {
     DBInstanceIdentifier = "${aws_db_instance.looker_rds.id}"
   }
@@ -57,6 +82,14 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_disk_queue_depth_too_high" {
   threshold           = "64"
   alarm_description   = "Average RDS disk queue depth has been over 64 for the last 10 minutes."
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
+
+  tags = {
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
 
   dimensions = {
     DBInstanceIdentifier = "${aws_db_instance.looker_rds.id}"
@@ -76,7 +109,15 @@ resource "aws_cloudwatch_metric_alarm" "looker_asg_looker_cpu_utilization_too_hi
   threshold           = "80"
   alarm_description   = "Average Looker Autoscale Group CPU Utilization has been over 80% for the last 10 minutes."
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
-  
+
+  tags = {
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
+
   dimensions = {
     AutoScalingGroupName = "${aws_autoscaling_group.asg_looker.id}"
   }
@@ -95,7 +136,15 @@ resource "aws_cloudwatch_metric_alarm" "looker_waf_blocked_requests" {
   threshold           = "1000"
   alarm_description   = "Sum WAF Blocked Request Count has been over 1000 for the last 10 minutes"
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
-  
+
+  tags = {
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
+
   dimensions = {
     WebACL  = "${aws_wafregional_web_acl.looker_waf_web_acl.id}"
     Region  = "${var.region}"

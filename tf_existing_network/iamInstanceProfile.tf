@@ -3,6 +3,16 @@
 resource "aws_iam_role" "looker_instance" {
 
   name = format("%s_instance", var.prefix)
+  
+  tags = {
+    Name            = "${var.prefix}_looker_iam_role"
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -143,8 +153,6 @@ resource "aws_iam_role_policy" "looker_efs" {
 }
 EOF
 }
-
-
 
 
 # IAM Instance Profile
