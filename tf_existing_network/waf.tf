@@ -18,6 +18,14 @@ resource "aws_wafregional_rule" "looker_waf_rule" {
   name        = "${var.prefix}_waf_rule"
   metric_name = "${var.prefix}wafrule"
 
+  tags = {
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
+
   predicate {
     data_id = aws_wafregional_ipset.looker_waf_ipset.id
     negated = false
@@ -28,6 +36,15 @@ resource "aws_wafregional_rule" "looker_waf_rule" {
 resource "aws_wafregional_web_acl" "looker_waf_web_acl" {
   name = "${var.prefix}_looker_waf_web_acl"
   metric_name = "${var.prefix}lookerwafwebacl"
+
+  tags = {
+    application     = var.tag_application
+    contact-email   = var.tag_contact_email
+    customer        = var.tag_customer
+    team            = var.tag_team
+    environment     = var.tag_environment
+  }
+
   default_action {
     type = "BLOCK"
   }
