@@ -4,25 +4,22 @@ This is the [terraform](https://www.terraform.io/) code to create the following 
 
 ![AWS](images/looker.jpg)
 
-**tf_s3_state** 
+## Directories
 
-- directory contains the terraform code to create an s3 bucket to store the terraform state for the terraform code in the other directory.
+The [tf_s3_state](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/tree/master/tf_s3_state) directory contains the terraform code to create an s3 bucket to store the terraform state for the terraform code in the other directory.
 
-**tf_existing_network**
+The [tf_existing_network](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/tree/master/tf_existing_network) directory contains the terraform code to create the complete AWS Looker stack using existing VPC's and Subnets.
 
-- directory contains the terraform code to create the complete AWS Looker stack using existing VPC's and Subnets.
-
-# How do I migrate new Looker AMI's to the stack I created in tf_existing_network?
+## How do I migrate new Looker AMIs to the stack I created in tf_existing_network?
 
 There are several steps required to migrate a new version of Looker.
 
-## Assumptions
+### Assumptions
 
 * You have followed the instructions [here](https://github.com/turnerlabs/looker_stack_aws_ec2_ami/blob/master/looker_node) to succesfully create a new Looker Node AMI.
 * You have followed the instructions [here](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/tree/master/tf_existing_network) to succesfully create a new Looker AWS Stack.
 
-
-## Steps
+### Steps
 
 1. Modify [asgLooker.tf](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/blob/master/tf_existing_network/asgLooker.tf) setting the max-size, min-size, and desired -capacity to zero.
 `max_size                  = "0"
