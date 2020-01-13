@@ -4,9 +4,13 @@ This is the [terraform](https://www.terraform.io/) code to create the following 
 
 ![AWS](images/looker.jpg)
 
-The [tf_s3_state](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/tree/master/tf_s3_state) path contains the terraform code to create an s3 bucket to store the terraform state for the terraform code in the other directory.
+**tf_s3_state** 
 
-The [tf_existing_network](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/tree/master/tf_existing_network) path contains the terraform code to create the complete AWS Looker stack using existing VPC's and Subnets.
+- directory contains the terraform code to create an s3 bucket to store the terraform state for the terraform code in the other directory.
+
+**tf_existing_network**
+
+- directory contains the terraform code to create the complete AWS Looker stack using existing VPC's and Subnets.
 
 # How do I migrate new Looker AMI's to the stack I created in tf_existing_network?
 
@@ -25,16 +29,18 @@ There are several steps required to migrate a new version of Looker.
   min_size                  = "0"
   desired_capacity          = "0"`
 
-2. Run `terraform apply ...` to apply the changes and take down all your instances.
+2. Run `terraform apply ...` to apply the changes which will take down all your instances.
 
-3. Delete the `resource "aws_autoscaling_group" "asg_looker" {...}` section in your asgLooker.tf file.
+3. Delete the `resource "aws_autoscaling_group" "asg_looker" {...}` section in your [asgLooker.tf](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/blob/master/tf_existing_network/asgLooker.tf) file.
 
-4. Delete the `resource "aws_cloudwatch_metric_alarm" "looker_asg_looker_cpu_utilization_too_high" {..}` section from your snsCloudwatch.tf file.
+4. Delete the `resource "aws_cloudwatch_metric_alarm" "looker_asg_looker_cpu_utilization_too_high" {..}` section from your [snsCloudwatch.tf](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/blob/master/tf_existing_network/snsCloudwatch.tf) file.
 
-5. Delete lines 28 - 48 from your cloudwatchDashboard.tf file.
+5. Delete lines 28 - 48 that reference the autoscale group from your [cloudwatchDashboard.tf](https://github.com/turnerlabs/looker_stack_aws_ec2_tf/blob/master/tf_existing_network/cloudwatchDashboard.tf) file.
 
 6. Run `terraform apply ...` to apply the changes and remove your auto scale group.
 
 7. Run `git checkout asgLooker.tf snsCloudwatch.tf cloudwatchDashboard.tf` to undo your changes.
 
-8. Run `terraform apply` again with the `-var 'looker_node_ami=<new looker ami>'` set to your new AMI to update the launch config(and the auto sclae group as well) with the new AMI.
+8. Run `terraform apply` again with the `-var 'looker_node_ami=<new looker ami id>'` set to your new AMI to update the launch config(and the auto scale group as well) with the new AMI.
+
+**To backout changes, do the same steps above replacing the `-var 'looker_node_ami=<new looker ami>'` section with the previous AMI's id**
