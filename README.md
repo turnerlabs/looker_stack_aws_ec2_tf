@@ -38,6 +38,6 @@ There are several steps required to migrate a new version of Looker.
 
 7. Run `git checkout asgLooker.tf snsCloudwatch.tf cloudwatchDashboard.tf` to undo your changes.
 
-8. Run `terraform apply` again with the `-var 'looker_node_ami=<new looker ami id>'` set to your new AMI to update the launch config(and the auto scale group as well) with the new AMI.
+8. Run `terraform apply ...` again with the `-var 'looker_node_ami=<new looker ami id>'` variable set to your new AMI to update the launch config(and the auto scale group as well) with the new AMI.
 
 **To backout changes, do the same steps above replacing the `-var 'looker_node_ami=<new looker ami>'` section with the previous AMI's id**
