@@ -21,10 +21,20 @@ It creates the following resources in AWS:
 
 The Looker instances will be able to communicate with each other as well as RDS MySQL.
 
-#### Assumptions:
+#### Assumptions
 
-A Key Pair has already been created.
+An Amazon SSH Key Pair(pem file) has already been created.
 A domain has been registered in Route53 with a hosted zone.
+
+#### Notes
+
+Each resource was broken into it's own terraform file.  So efs.tf has the efs resources and rds.tf has the rds resources.  
+
+I won't get into the details of each resource but you can take a look at the terraform AWS provider [here](https://www.terraform.io/docs/providers/aws/index.html) for more information on the paramters for each resource.
+
+The main.tf file containing all the common things like what version of the aws provider is required and the version of terraform that's required.
+
+The tpl files contain the user-data scripts for the ec2 resources in auto scale groups.
 
 Please check the variables.tf for a clear description of what each variable is that is passed to this terraform.
 
