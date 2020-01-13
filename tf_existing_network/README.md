@@ -1,6 +1,6 @@
 # Description
 
-This is a terraform script to create a complete Looker stack excluding networking(assume a direct connnected setup).
+This is a [terraform](https://www.terraform.io/) script to create a complete Looker stack excluding networking(assume a direct connnected setup).
 
 You will need to update the terraform state bucket in the main.tf file.  This should have already been created in the tf_s3_state directory.
 
