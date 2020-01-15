@@ -1,13 +1,5 @@
 # Backup Instance Related Items
 # Using an lc / asg to have backup instance come up and run once a day.
-data "template_file" "backup-node-user-data" {
-  template = "${file("backup_node_install.tpl")}"
-  vars = {
-    s3_looker_backup_bucket_name = "${aws_s3_bucket.s3_looker_backup_bucket.id}"
-    efs_dns_name = aws_efs_file_system.looker_clustered_efs.dns_name
-  }
-}
-
 resource "aws_launch_configuration" "lc_backup" {
   name                        = "${var.prefix}_lc_backup"
   associate_public_ip_address = false
@@ -15,7 +7,7 @@ resource "aws_launch_configuration" "lc_backup" {
   instance_type               = var.backup_node_instance_class
   key_name                    = var.looker_keypair_name
   security_groups             = ["${aws_security_group.looker_instance.id}"]
-  user_data                   = data.template_file.backup-node-user-data.rendered
+  user_data_base64            = base64encode(templatefile("${path.cwd}/templates/backup-user-data.tpl", {s3_looker_backup_bucket_name = "${aws_s3_bucket.s3_looker_backup_bucket.id}",efs_dns_name = aws_efs_file_system.looker_clustered_efs.dns_name }))
   iam_instance_profile        = aws_iam_instance_profile.looker_s3_instance_profile.id
 
   root_block_device {
