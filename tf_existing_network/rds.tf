@@ -198,6 +198,7 @@ resource "aws_db_instance" "looker_rds" {
   storage_encrypted                     = true
   username                              = var.db_master_username
   vpc_security_group_ids                = ["${aws_security_group.looker_rds.id}"]
+  ca_cert_identifier                    = var.db_cert
 
   tags = {
     Name            = "${var.prefix}-${var.db_identifier}"
