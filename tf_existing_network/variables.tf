@@ -15,6 +15,19 @@ variable "tag_customer" {}
 variable "tag_team" {}
 variable "tag_environment" {}
 
+variable "datadog_api_key" {
+  description = "Datadog API Key"
+}
+
+variable "datadog_app_key" {
+  description = "Datadog app Key"
+}
+
+variable "aws_account_role_name_dd" {
+  description = "AWS Account Role for Datadog"
+  default = "DatadogAWSIntegrationRole"
+}
+
 variable "vpc_id" {
   description = "VPC to launch looker in"
 }
