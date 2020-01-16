@@ -11,7 +11,7 @@ terraform {
 
 # this is for an aws specific provider(not gcp or azure)
 provider "aws" {
-  version = "~> 2.44.0"
+  version = "~> 2.42.0"
   region  = var.region
   profile = var.profile
 }

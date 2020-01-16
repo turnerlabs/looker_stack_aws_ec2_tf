@@ -198,7 +198,8 @@ resource "aws_db_instance" "looker_rds" {
   storage_encrypted                     = true
   username                              = var.db_master_username
   vpc_security_group_ids                = ["${aws_security_group.looker_rds.id}"]
-  ca_cert_identifier                    = var.db_cert
+  ca_cert_identifier                    = "rds-ca-2019"  # this is hardcoded because it's broken in the 2.44.0 version on the AWS provider.
+
 
   tags = {
     Name            = "${var.prefix}-${var.db_identifier}"

@@ -120,12 +120,6 @@ variable "db_instance_class" {
   default     = "db.m5.large"
 }
 
-variable "db_cert" {
-  description = "Certificate for RDS server"
-  default     = "rds-ca-2019"
-}
-
-
 variable "s3_looker_bucket_name"  {
   description = "looker bucket for looker shared directory"
 }
