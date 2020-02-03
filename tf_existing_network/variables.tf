@@ -15,14 +15,6 @@ variable "tag_customer" {}
 variable "tag_team" {}
 variable "tag_environment" {}
 
-variable "datadog_api_key" {
-  description = "Datadog API Key"
-}
-
-variable "datadog_app_key" {
-  description = "Datadog app Key"
-}
-
 variable "aws_account_role_name_dd" {
   description = "AWS Account Role for Datadog"
   default = "DatadogAWSIntegrationRole"
@@ -132,8 +124,12 @@ variable "s3_looker_access_log_bucket_name"  {
   description = "looker bucket for alb access logs"
 }
 
-variable "waf_ip"  {
-  description = "instance ingress ip to allow"
+variable "waf_ip1"  {
+  description = "WAF ingress ip to allow"
+}
+
+variable "waf_ip2"  {
+  description = "WAF ingress ip to allow"
 }
 
 variable "waf_looker_support_ip"  {
@@ -218,4 +214,12 @@ variable "per_user_query_limit" {
 variable "scheduler_query_timeout" {
   description="Length of scheduler timeout to wait for connection"
   default="3600"
+}
+
+variable "datadog_api_key" {
+  description="datadog api key"
+}
+
+variable "datadog_app_key" {
+  description="datadog app key"
 }
