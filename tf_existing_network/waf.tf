@@ -5,7 +5,12 @@ resource "aws_wafregional_ipset" "looker_waf_ipset" {
 
   ip_set_descriptor {
     type  = "IPV4"
-    value = var.waf_ip
+    value = var.waf_ip1
+  }
+
+  ip_set_descriptor {
+    type  = "IPV4"
+    value = var.waf_ip2
   }
 
   ip_set_descriptor {
