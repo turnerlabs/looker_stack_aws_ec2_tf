@@ -40,6 +40,16 @@ variable "public_subnet2_id" {
   description = "Public Subnet"
 }
 
+variable "availability_zone_1" {
+  description = "az 1 of 2 azs"
+  default     = "us-east-1b"
+}
+
+variable "availability_zone_2" {
+  description = "az 2 of 2 azs"
+  default     = "us-east-1d"
+}
+
 variable "prefix" {
   description = "Name to prefix all the items with"
 }
@@ -105,6 +115,11 @@ variable "db_looker_dbname" {
 variable "db_engine_version" {
   description = "MYSQL looker engine version"
   default     = "5.7.16"
+}
+
+variable "db_parameter_group_name" {
+  description = "MYSQL airflow parameter group"
+  default     = "default.mysql5.7"
 }
 
 variable "db_instance_class" {
@@ -179,6 +194,11 @@ variable "efs_mount_point" {
 variable "node_listener_port" {
   description="Node listener port for looker nodes"
   default="9999"
+}
+
+variable "api_listener_port" {
+  description="API listener port for looker nodes"
+  default="19999"
 }
 
 variable "node_to_node_port" {

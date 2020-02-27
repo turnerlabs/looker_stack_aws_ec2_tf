@@ -13,51 +13,51 @@ resource "aws_db_subnet_group" "looker_rds_subnet_grp" {
   }
 }
 
-resource "aws_db_parameter_group" "looker_rds_parameter_grp" {
-  name   = "${var.prefix}-looker-rds-parameter-grp"
-  family = "mysql5.7"
+# resource "aws_db_parameter_group" "looker_rds_parameter_grp" {
+#   name   = "${var.prefix}-looker-rds-parameter-grp"
+#   family = "mysql5.7"
 
-  parameter {
-    name = "max_allowed_packet"
-    value = "1073741824"
-  }
+#   parameter {
+#     name = "max_allowed_packet"
+#     value = "1073741824"
+#   }
   
-  parameter {
-    name = "character_set_client"
-    value = "utf8mb4"
-  }
+#   parameter {
+#     name = "character_set_client"
+#     value = "utf8mb4"
+#   }
 
-  parameter {
-    name = "character_set_results"
-    value = "utf8mb4"
-  }
+#   parameter {
+#     name = "character_set_results"
+#     value = "utf8mb4"
+#   }
 
-  parameter {
-    name = "character_set_connection"
-    value = "utf8mb4"
-  }
+#   parameter {
+#     name = "character_set_connection"
+#     value = "utf8mb4"
+#   }
 
-  parameter {
-    name = "character_set_database"
-    value = "utf8mb4"
-  }
+#   parameter {
+#     name = "character_set_database"
+#     value = "utf8mb4"
+#   }
 
-  parameter {
-    name = "character_set_server"
-    value = "utf8mb4"
-  }
+#   parameter {
+#     name = "character_set_server"
+#     value = "utf8mb4"
+#   }
 
-  parameter {
-    name = "collation_connection"
-    value = "utf8mb4_general_ci"
-  }
+#   parameter {
+#     name = "collation_connection"
+#     value = "utf8mb4_general_ci"
+#   }
 
-  parameter {
-    name = "collation_server"
-    value = "utf8mb4_general_ci"
-  }
+#   parameter {
+#     name = "collation_server"
+#     value = "utf8mb4_general_ci"
+#   }
 
-}
+# }
 
 resource "aws_db_instance" "looker_rds" {
   allocated_storage                     = 150
@@ -75,11 +75,11 @@ resource "aws_db_instance" "looker_rds" {
   instance_class                        = var.db_instance_class
   max_allocated_storage                 = 1000
   multi_az                              = true
-  parameter_group_name                  = aws_db_parameter_group.looker_rds_parameter_grp
+  parameter_group_name                  = var.db_parameter_group_name
   password                              = var.db_master_password
   port                                  = var.db_port
   publicly_accessible                   = false
-  skip_final_snapshot                   = "false"
+  skip_final_snapshot                   = "true"
   storage_type                          = "gp2"
   username                              = var.db_master_username
   vpc_security_group_ids                = ["${aws_security_group.looker_rds.id}"]

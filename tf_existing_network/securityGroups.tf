@@ -52,6 +52,13 @@ resource "aws_security_group" "looker_instance" {
   }
 
   ingress {
+    from_port       = var.api_listener_port
+    to_port         = var.api_listener_port
+    protocol        = "tcp"
+    security_groups = ["${aws_security_group.looker_lb.id}"]
+  }
+
+  ingress {
     from_port       = var.node_to_node_port
     to_port         = var.node_to_node_port
     protocol        = "tcp"
