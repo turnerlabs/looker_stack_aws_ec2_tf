@@ -2,7 +2,7 @@
 
 This is the [terraform](https://www.terraform.io/) code to create the following Looker architecture(assuming all the VPC's / Subnets are already in place).
 
-![AWS](images/looker.jpg)
+![AWS](arch/looker.jpg)
 
 ## Directories
 
