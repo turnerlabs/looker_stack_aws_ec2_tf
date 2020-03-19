@@ -13,11 +13,11 @@ resource "aws_s3_bucket" "s3_looker_backup_bucket" {
   }
 
   tags = {
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }
 
@@ -34,13 +34,13 @@ resource "aws_s3_bucket" "s3_looker_bucket" {
       }
     }
   }
-  
+
   tags = {
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }
 
@@ -49,26 +49,26 @@ resource "aws_s3_bucket" "s3_looker_access_log_bucket" {
   bucket        = "${var.prefix}-${var.s3_looker_access_log_bucket_name}"
   force_destroy = "true"
 
-  server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.looker_s3_kms_key.arn
-        sse_algorithm     = "aws:kms"
-      }
-    }
-  }
+  # server_side_encryption_configuration {
+  #   rule {
+  #     apply_server_side_encryption_by_default {
+  #       kms_master_key_id = aws_kms_key.looker_s3_kms_key.arn
+  #       sse_algorithm     = "aws:kms"
+  #     }
+  #   }
+  # }
 
   tags = {
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
   lifecycle_rule {
     id      = "looker_access_logs"
     enabled = true
-    
+
     transition {
       days          = 30
       storage_class = "STANDARD_IA"
@@ -84,7 +84,7 @@ resource "aws_s3_bucket" "s3_looker_access_log_bucket" {
     }
   }
 
-policy = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [

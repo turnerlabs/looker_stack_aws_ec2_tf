@@ -14,12 +14,12 @@ resource "aws_secretsmanager_secret" "looker_sm_secret" {
   recovery_window_in_days = 0 # make this configurable
 
   tags = {
-    Name            = "${var.prefix}_looker_sm_secret"
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    Name          = "${var.prefix}_looker_sm_secret"
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 }
 

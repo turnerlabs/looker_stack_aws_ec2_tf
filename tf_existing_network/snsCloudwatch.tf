@@ -1,19 +1,19 @@
 # AWS SNS Email
 
 resource "aws_sns_topic" "looker_sns_notifications" {
-  name = "looker_sns_notifications"
+  name = "${var.prefix}_looker_sns_notif"
 
   tags = {
-    Name            = "${var.prefix}_looker_sns_notif"
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    Name          = "${var.prefix}_looker_sns_notif"
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   provisioner "local-exec" {
-    command = "aws sns subscribe --topic-arn ${aws_sns_topic.looker_sns_notifications.arn} --protocol email --notification-endpoint ${var.notification_email}"
+    command = "aws sns subscribe --region ${var.region} --topic-arn ${aws_sns_topic.looker_sns_notifications.arn} --protocol email --notification-endpoint ${var.notification_email}"
   }
 }
 
@@ -34,11 +34,11 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_cpu_utilization_too_high" {
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
 
   tags = {
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   dimensions = {
@@ -59,11 +59,11 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_free_storage_space_too_low" {
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
 
   tags = {
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   dimensions = {
@@ -84,11 +84,11 @@ resource "aws_cloudwatch_metric_alarm" "looker_rds_disk_queue_depth_too_high" {
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
 
   tags = {
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   dimensions = {
@@ -111,11 +111,11 @@ resource "aws_cloudwatch_metric_alarm" "looker_asg_looker_cpu_utilization_too_hi
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
 
   tags = {
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   dimensions = {
@@ -138,16 +138,16 @@ resource "aws_cloudwatch_metric_alarm" "looker_waf_blocked_requests" {
   alarm_actions       = ["${aws_sns_topic.looker_sns_notifications.arn}"]
 
   tags = {
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   dimensions = {
-    WebACL  = "${aws_wafregional_web_acl.looker_waf_web_acl.id}"
-    Region  = "${var.region}"
-    Rule    = "${aws_wafregional_rule.looker_waf_rule.id}"
+    WebACL = "${aws_wafregional_web_acl.looker_waf_web_acl.id}"
+    Region = "${var.region}"
+    Rule   = "${aws_wafregional_rule.looker_waf_rule.id}"
   }
 }

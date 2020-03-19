@@ -5,30 +5,30 @@ resource "aws_lb_target_group" "looker_lb_tg" {
   port     = var.node_listener_port
   protocol = "HTTP"
   vpc_id   = var.vpc_id
-  
+
   health_check {
-    port      = var.node_listener_port
-    protocol  = "HTTP"
-    path      = "/alive"
+    port     = var.node_listener_port
+    protocol = "HTTP"
+    path     = "/alive"
   }
 
   tags = {
-    Name            = "${var.prefix}_lb_tg"
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    Name          = "${var.prefix}_lb_tg"
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 }
 
 resource "aws_lb" "looker_lb" {
-  name                = "${var.prefix}-alb"
-  internal            = false
-  load_balancer_type  = "application"
-  security_groups     = ["${aws_security_group.looker_lb.id}"]
-  subnets             = ["${var.public_subnet1_id}", "${var.public_subnet2_id}"]
-  
+  name               = "${var.prefix}-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = ["${aws_security_group.looker_lb.id}"]
+  subnets            = ["${var.public_subnet1_id}", "${var.public_subnet2_id}"]
+
   access_logs {
     bucket  = aws_s3_bucket.s3_looker_access_log_bucket.id
     prefix  = "looker-lb"
@@ -36,12 +36,12 @@ resource "aws_lb" "looker_lb" {
   }
 
   tags = {
-    Name            = "${var.prefix}_alb"
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    Name          = "${var.prefix}_alb"
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 }
 

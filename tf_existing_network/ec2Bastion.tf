@@ -7,11 +7,11 @@ resource "aws_instance" "instance_bastion" {
   associate_public_ip_address = true
 
   tags = {
-    Name            = "${var.prefix}_looker_bastion"
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    Name          = "${var.prefix}_looker_bastion"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }

@@ -17,10 +17,10 @@ resource "aws_s3_bucket" "bucket" {
   }
 
   tags = {
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }

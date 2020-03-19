@@ -24,11 +24,11 @@ resource "aws_wafregional_rule" "looker_waf_rule" {
   metric_name = "${var.prefix}wafrule"
 
   tags = {
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   predicate {
@@ -39,15 +39,15 @@ resource "aws_wafregional_rule" "looker_waf_rule" {
 }
 
 resource "aws_wafregional_web_acl" "looker_waf_web_acl" {
-  name = "${var.prefix}_looker_waf_web_acl"
+  name        = "${var.prefix}_looker_waf_web_acl"
   metric_name = "${var.prefix}lookerwafwebacl"
 
   tags = {
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   default_action {
@@ -58,11 +58,11 @@ resource "aws_wafregional_web_acl" "looker_waf_web_acl" {
       type = "ALLOW"
     }
     priority = 1
-    rule_id = aws_wafregional_rule.looker_waf_rule.id
+    rule_id  = aws_wafregional_rule.looker_waf_rule.id
   }
 }
 
 resource "aws_wafregional_web_acl_association" "looker_waf_web_acl_assoc" {
-  resource_arn  = aws_lb.looker_lb.arn
-  web_acl_id    = aws_wafregional_web_acl.looker_waf_web_acl.id
+  resource_arn = aws_lb.looker_lb.arn
+  web_acl_id   = aws_wafregional_web_acl.looker_waf_web_acl.id
 }

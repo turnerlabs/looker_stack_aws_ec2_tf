@@ -3,14 +3,14 @@
 resource "aws_iam_role" "looker_instance" {
 
   name = format("%s_instance", var.prefix)
-  
+
   tags = {
-    Name            = "${var.prefix}_looker_iam_role"
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    Name          = "${var.prefix}_looker_iam_role"
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 
   assume_role_policy = <<EOF
@@ -165,6 +165,6 @@ resource "aws_iam_instance_profile" "looker_s3_instance_profile" {
 # SSM Policy for cloudwatch logs
 
 resource "aws_iam_role_policy_attachment" "looker_ssm_managed_policy_attachment" {
-  role = aws_iam_role.looker_instance.name
+  role       = aws_iam_role.looker_instance.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }

@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_dashboard" "cw_dashboard_looker" {
   dashboard_name = "looker"
 
-dashboard_body = <<EOF
+  dashboard_body = <<EOF
 {
   "widgets": [
     {

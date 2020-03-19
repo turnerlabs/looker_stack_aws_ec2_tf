@@ -4,30 +4,30 @@ resource "aws_security_group" "looker_lb" {
   name        = "${var.prefix}_lb"
   description = "Security group for access to looker load balancer"
   vpc_id      = var.vpc_id
-  
+
   # This needs to be expanded to all the ip ranges.
   ingress {
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
-    cidr_blocks     = split(",", var.ingress_ips)
-    description     = var.ingress_ip_description
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = split(",", var.ingress_ips)
+    description = var.ingress_ip_description
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name            = "${var.prefix}_lb"
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    Name          = "${var.prefix}_lb"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }
 
@@ -59,33 +59,33 @@ resource "aws_security_group" "looker_instance" {
   }
 
   ingress {
-    from_port       = var.node_to_node_port
-    to_port         = var.node_to_node_port
-    protocol        = "tcp"
-    cidr_blocks     = ["10.0.0.0/8"]
+    from_port   = var.node_to_node_port
+    to_port     = var.node_to_node_port
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
   }
 
   ingress {
-    from_port       = var.queue_broker_port
-    to_port         = var.queue_broker_port
-    protocol        = "tcp"
-    cidr_blocks     = ["10.0.0.0/8"]
+    from_port   = var.queue_broker_port
+    to_port     = var.queue_broker_port
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name            = "${var.prefix}_instance"
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    Name          = "${var.prefix}_instance"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }
 
@@ -103,19 +103,19 @@ resource "aws_security_group" "looker_rds" {
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name            = "${var.prefix}_rds"
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    Name          = "${var.prefix}_rds"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }
 
@@ -126,27 +126,27 @@ resource "aws_security_group" "bastion_instance" {
   vpc_id      = var.vpc_id
 
   ingress {
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    cidr_blocks     = split(",", var.ingress_ips)
-    description     = var.ingress_ip_description
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = split(",", var.ingress_ips)
+    description = var.ingress_ip_description
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name            = "${var.prefix}_bastion"
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    Name          = "${var.prefix}_bastion"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }
 
@@ -164,18 +164,18 @@ resource "aws_security_group" "looker_efs" {
   }
 
   egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name            = "${var.prefix}_efs"
-    application     = "${var.tag_application}"
-    contact-email   = "${var.tag_contact_email}"
-    customer        = "${var.tag_customer}"
-    team            = "${var.tag_team}"
-    environment     = "${var.tag_environment}"
+    Name          = "${var.prefix}_efs"
+    application   = "${var.tag_application}"
+    contact-email = "${var.tag_contact_email}"
+    customer      = "${var.tag_customer}"
+    team          = "${var.tag_team}"
+    environment   = "${var.tag_environment}"
   }
 }

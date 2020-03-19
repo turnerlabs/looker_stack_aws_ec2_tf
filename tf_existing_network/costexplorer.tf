@@ -7,10 +7,10 @@ resource "aws_budgets_budget" "looker_budget" {
   time_unit         = "MONTHLY"
 
   cost_filters = {
-    TagKeyValue = "user:application$looker"
+    TagKeyValue = "user:application$${var.tag_application}"
   }
 
   cost_types {
     use_amortized = true
-  }  
+  }
 }

@@ -5,12 +5,12 @@ resource "aws_acm_certificate" "looker_acm_cert" {
   validation_method = "DNS"
 
   tags = {
-    Name            = "${var.prefix}_looker_acm_cert"
-    application     = var.tag_application
-    contact-email   = var.tag_contact_email
-    customer        = var.tag_customer
-    team            = var.tag_team
-    environment     = var.tag_environment
+    Name          = "${var.prefix}_looker_acm_cert"
+    application   = var.tag_application
+    contact-email = var.tag_contact_email
+    customer      = var.tag_customer
+    team          = var.tag_team
+    environment   = var.tag_environment
   }
 }
 
