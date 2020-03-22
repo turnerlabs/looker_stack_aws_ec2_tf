@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_dashboard" "cw_dashboard_looker" {
-  dashboard_name = "looker"
+  dashboard_name = var.tag_name
 
   dashboard_body = <<EOF
 {
@@ -161,13 +161,13 @@ resource "aws_cloudwatch_dashboard" "cw_dashboard_looker" {
         "metrics": [
           [
             "AWS/EFS",
-            "DataReadIOBytesa",
+            "DataReadIOBytes",
             "FileSystemId",
             "${aws_efs_file_system.looker_clustered_efs.id}"
           ],
           [
             "AWS/EFS",
-            "DataWtiteIOBytesa",
+            "DataWriteIOBytes",
             "FileSystemId",
             "${aws_efs_file_system.looker_clustered_efs.id}"
           ]

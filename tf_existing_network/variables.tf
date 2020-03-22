@@ -172,6 +172,11 @@ variable "subdomain" {
   description = "Sub Domain for cert"
 }
 
+variable "cost_filter" {
+  description = "cost filter for budgeting by tag"
+}
+
+
 variable "alb_accesslog_account" {
   description = "Look here for more info: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#access-logging-bucket-permissions"
   default     = "127311923021"

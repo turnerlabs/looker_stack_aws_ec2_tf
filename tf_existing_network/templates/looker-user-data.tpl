@@ -89,6 +89,12 @@ cat /proc/mounts | grep looker
 
 echo "############# Mount EFS #############"
 
+mv /home/looker/.ssh /home/looker/.ssh_bak
+chmod 600 ${efs_mount_point}/deploy_keys
+ln -s ${efs_mount_point}/deploy_keys /home/looker/.ssh
+
+echo "############# Link deployment keys share to .ssh directory #############"
+
 systemctl enable datadog-agent.service
 systemctl enable looker.service
 systemctl daemon-reload
