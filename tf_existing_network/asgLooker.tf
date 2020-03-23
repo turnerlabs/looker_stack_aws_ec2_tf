@@ -28,7 +28,7 @@ resource "aws_autoscaling_group" "asg_looker" {
   health_check_grace_period = 300
   health_check_type         = "EC2"
   termination_policies      = ["OldestInstance", "OldestLaunchConfiguration"]
-  target_group_arns         = ["${aws_lb_target_group.looker_lb_tg.arn}"]
+  target_group_arns         = ["${aws_lb_target_group.looker_lb_tg.arn}","${aws_lb_target_group.looker_api_lb_tg.arn}"]
 
   tag {
     key                 = "Name"
