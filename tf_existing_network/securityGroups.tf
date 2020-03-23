@@ -14,6 +14,14 @@ resource "aws_security_group" "looker_lb" {
     description = var.ingress_ip_description
   }
 
+  ingress {
+    from_port   = var.api_listener_port
+    to_port     = var.api_listener_port
+    protocol    = "tcp"
+    cidr_blocks = split(",", var.ingress_ips)
+    description = var.ingress_ip_description
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
