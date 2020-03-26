@@ -4,3 +4,7 @@
 *.tfvars
 *.backup
 __pycache__
+*.prod
+*.dev
+*.stage
+
