@@ -3,7 +3,7 @@ terraform {
   required_version = ">=0.12.19"
   
   backend "s3" {
-    bucket = "s3_state_bucket" # the terraform state bucket has to be hand entered unfortunately
+    bucket = "tf-state-looker-prod" # the terraform state bucket has to be hand entered unfortunately
     key    = "tf_existing_network/terraform.tfstate"
     region = "us-east-1"
   }

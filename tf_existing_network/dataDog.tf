@@ -1,7 +1,7 @@
-resource "datadog_integration_aws" "dd_int_aws" {
-  account_id = var.aws_account_number
-  role_name  = var.aws_account_role_name_dd
-}
+# resource "datadog_integration_aws" "dd_int_aws" {
+#   account_id = var.aws_account_number
+#   role_name  = var.aws_account_role_name_dd
+# }
 
 resource "datadog_dashboard" "ordered_dashboard" {
   title        = "Looker Dashbaord for ${var.subdomain}"

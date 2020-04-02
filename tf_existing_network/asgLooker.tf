@@ -66,3 +66,55 @@ resource "aws_autoscaling_group" "asg_looker" {
     propagate_at_launch = true
   }
 }
+
+resource "aws_autoscaling_policy" "looker_scale_up_policy" {
+  name                   = "${var.prefix}_looker_scale_up_policy"
+  scaling_adjustment     = 1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 120
+  autoscaling_group_name = aws_autoscaling_group.asg_looker.name
+}
+
+resource "aws_cloudwatch_metric_alarm" "looker_cw_add_alarm" {
+  alarm_name          = "${var.prefix}_looker_cw_add_alarm"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "60"
+
+  dimensions = {
+    AutoScalingGroupName = "${aws_autoscaling_group.asg_looker.name}"
+  }
+
+  alarm_description = "This metric monitors ec2 cpu utilization"
+  alarm_actions     = [aws_autoscaling_policy.looker_scale_up_policy.arn]
+}
+
+resource "aws_autoscaling_policy" "looker_scale_down_policy" {
+  name                   = "${var.prefix}_looker_scale_down_policy"
+  scaling_adjustment     = -1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 240
+  autoscaling_group_name = aws_autoscaling_group.asg_looker.name
+}
+
+resource "aws_cloudwatch_metric_alarm" "looker_cw_remove_alarm" {
+  alarm_name          = "${var.prefix}_looker_cw_remove_alarm"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "5"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "60"
+  statistic           = "Average"
+  threshold           = "60"
+
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.asg_looker.name
+  }
+
+  alarm_description = "This metric monitors ec2 cpu utilization"
+  alarm_actions     = [aws_autoscaling_policy.looker_scale_down_policy.arn]
+}

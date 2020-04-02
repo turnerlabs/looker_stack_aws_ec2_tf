@@ -28,6 +28,7 @@ resource "aws_lb" "looker_lb" {
   load_balancer_type = "application"
   security_groups    = ["${aws_security_group.looker_lb.id}"]
   subnets            = ["${var.public_subnet1_id}", "${var.public_subnet2_id}"]
+  idle_timeout       = 3600
 
   access_logs {
     bucket  = aws_s3_bucket.s3_looker_access_log_bucket.id

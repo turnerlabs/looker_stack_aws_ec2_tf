@@ -1,11 +1,9 @@
 variable "region" {
   description = "Region"
-  default     = "us-east-1"
 }
 
 variable "profile" {
   description = "Profile from credentials"
-  default     = "default"
 }
 
 variable "tag_name" {}
