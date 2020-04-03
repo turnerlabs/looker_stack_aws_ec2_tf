@@ -12,7 +12,7 @@ resource "aws_launch_configuration" "lc_looker" {
 
   root_block_device {
     volume_type           = "gp2"
-    volume_size           = 8
+    volume_size           = 25
     encrypted             = true
     delete_on_termination = true
   }
